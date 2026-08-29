@@ -1,0 +1,6 @@
+name: local
+variables:
+  - name: baseUrl
+    value: http://localhost:8080
+  - name: testMovieId
+    value: ba9294ac-338d-4b57-9576-85bbe4ca21ba

@@ -1,0 +1,36 @@
+info:
+  name: Create Movie
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/movies"
+  body:
+    type: json
+    data: |-
+      {
+        "id": "fakeid",
+        "name": "fake test movie",
+        "description": "New test movie object."
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const response = res.getBody();
+
+        const newMovieId = response.movie?.id;
+
+        bru.setEnvVar('testMovieId', newMovieId);
+
+        console.log(bru.getEnvVar('testMovieId'));
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true

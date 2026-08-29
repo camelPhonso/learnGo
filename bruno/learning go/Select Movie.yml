@@ -1,0 +1,20 @@
+info:
+  name: Select Movie
+  type: http
+  seq: 5
+
+http:
+  method: GET
+  url: "{{baseUrl}}/movies/:movieId"
+  params:
+    - name: movieId
+      value: "{{testMovieId}}"
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
