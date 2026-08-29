@@ -1,8 +1,6 @@
 package db
 
 import (
-	"errors"
-	"fmt"
 	"uuid"
 )
 
@@ -11,7 +9,7 @@ func CreateMovie(movie *Movie) (*Movie, error) {
 
 	response := db.Create(&movie)
 	if response.Error != nil {
-		return nil, response.Error
+		return nil, Error{ErrNotActioned}
 	}
 
 	return movie, nil
@@ -22,7 +20,11 @@ func GetAllMovies() ([]*Movie, error) {
 	result := db.Find(&allMovies)
 
 	if result.Error != nil {
-		return nil, errors.New("Could not recover any movies")
+		return nil, Error{ErrNotFound}
+	}
+
+	if len(allMovies) == 0 {
+		return nil, Error{ErrNotFound}
 	}
 	return allMovies, nil
 }
@@ -32,7 +34,7 @@ func GetMovie(id string) (*Movie, error) {
 	response := db.First(&movie, "id=?", id)
 
 	if response.RowsAffected == 0 {
-		return nil, &InvalidIdError{id}
+		return nil, Error{ErrNotFound}
 	}
 	return movie, nil
 }
@@ -42,7 +44,7 @@ func DeleteMovie(id string) error {
 	result := db.Delete(&deletedMovie, "id = ?", id)
 
 	if result.RowsAffected == 0 {
-		return errors.New(fmt.Sprintf("No movie with id %s found", id))
+		return Error{ErrNotActioned}
 	}
 	return nil
 }

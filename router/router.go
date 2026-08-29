@@ -10,7 +10,8 @@ import (
 func FindAll(context *gin.Context) {
 	movies, error := db.GetAllMovies()
 	if error != nil {
-		context.JSON(http.StatusNotFound, gin.H{"error": error.Error()})
+		response := FromError(error)
+		context.JSON(response.Status, gin.H{"error": response.Error()})
 		return	
 	}
 
@@ -21,7 +22,8 @@ func FindOne(context *gin.Context) {
 	id := context.Param("movieId")
 	movie, error := db.GetMovie(id)
 	if error != nil {
-		context.JSON(http.StatusNotFound, gin.H{"error": error.Error()})
+		response := FromError(error)
+		context.JSON(response.Status, gin.H{"error": response.Error()})
 		return
 	}
 
@@ -32,13 +34,15 @@ func Insert(context *gin.Context) {
 	var movie *db.Movie
 	contextError := context.Bind(&movie)
 	if contextError != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"error": contextError.Error()})
+		response := FromError(contextError)
+		context.JSON(response.Status, gin.H{"error": response.Error()})
 		return
 	}
 
 	movie, error := db.CreateMovie(movie)
 	if error != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"error": error.Error()})
+		response := FromError(error)
+		context.JSON(response.Status, gin.H{"error": response.Error()})
 		return
 	}
 
@@ -47,9 +51,11 @@ func Insert(context *gin.Context) {
 
 func DeleteOne(context *gin.Context) {
 	id := context.Param("movieId")
+	
 	error := db.DeleteMovie(id)
 	if error != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"error": error.Error})
+		response := FromError(error)
+		context.JSON(response.Status, gin.H{"error": response.Error()})
 		return
 	}
 
