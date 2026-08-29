@@ -8,8 +8,24 @@ http:
   url: "{{baseUrl}}/movies"
   auth: inherit
 
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Should return dynamic status based on returned colleciton", () => {
+          const arrayLength = res.getBody().movies;
+          
+          switch (arrayLength ) {
+            case true:
+              expect(res.getStatus()).to.equal(200);
+            case false:
+              expect(res.getStatus()).to.equal(404);
+          }
+        })
+
 settings:
   encodeUrl: true
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+  forwardAuthorizationHeader: true

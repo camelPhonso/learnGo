@@ -12,6 +12,14 @@ http:
       type: path
   auth: inherit
 
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Should return 200 OK status", () => {
+          expect(res.getStatus()).to.equal(200);
+        })
+
 settings:
   encodeUrl: true
   timeout: 0

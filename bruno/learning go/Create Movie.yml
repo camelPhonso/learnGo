@@ -27,6 +27,11 @@ runtime:
         bru.setEnvVar('testMovieId', newMovieId);
 
         console.log(bru.getEnvVar('testMovieId'));
+    - type: tests
+      code: |-
+        test("should return 200 OK status", () => {
+          expect(res.getStatus()).to.equal(200);
+        })
 
 settings:
   encodeUrl: true
