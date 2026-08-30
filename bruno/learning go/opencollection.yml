@@ -2,6 +2,24 @@ opencollection: 1.0.0
 
 info:
   name: learning go
+config:
+  proxy:
+    inherit: true
+    config:
+      protocol: http
+      hostname: ""
+      port: ""
+      auth:
+        username: ""
+        password: ""
+      bypassProxy: ""
+
+request:
+  auth:
+    type: apikey
+    key: Auth-Go-Key
+    value: ducks
+    placement: header
 bundled: false
 extensions:
   bruno:
