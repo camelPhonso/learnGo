@@ -6,8 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// TO DO: implement midware to check auth headers
-
 func InitRouter() *gin.Engine {
 	router := gin.Default()
 	router.Use(AuthMiddleware())
