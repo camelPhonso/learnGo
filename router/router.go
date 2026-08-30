@@ -10,6 +10,7 @@ import (
 
 func InitRouter() *gin.Engine {
 	router := gin.Default()
+	router.Use(AuthMiddleware())
 
 	router.GET("/health", func(context *gin.Context) { context.JSON(http.StatusOK, gin.H{"message": "Server is alive"})})
 
