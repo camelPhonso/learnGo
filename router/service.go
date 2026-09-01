@@ -1,11 +1,7 @@
 package router
 
 import (
-	"os"
-	"bufio"
-	"fmt"
 	"net/http"
-	"encoding/json"
 
 	"github.com/gin-gonic/gin"
 	db "local.learn.go/db"
@@ -73,26 +69,14 @@ func UploadFile(context *gin.Context) {
 		return
 	}
 
-	content, err := os.Open(file.Filename)
+	movies, err := db.Read(file.Filename)
 	if err != nil {
-		fmt.Printf("error reading file: %s", err.Error())
-		return
-	}
-	defer content.Close()
-
-	scanner := bufio.NewScanner(content)
-	for scanner.Scan() {
-		var newMovie db.Movie
-
-		line := []byte(fmt.Sprintf("{%s}", scanner.Text()))
-		err := json.Unmarshal(line, &newMovie)
-		if err != nil {
-			context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-
-		db.CreateMovie(&newMovie)
+		result := FromError(err)
+		context.JSON(result.Status, result.Error())
 	}
 
+	for _, movie := range movies {
+		db.CreateMovie(&movie)
+	}
 	context.JSON(http.StatusOK, gin.H{"file": file.Filename})
 }
