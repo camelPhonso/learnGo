@@ -41,6 +41,8 @@ func FromError(e error) Error {
 			case db.ErrNotFound:
 				routerError.Status = http.StatusNotFound
 				break
+			case db.ErrBadFile:
+				routerError.Status = http.StatusBadRequest
 			default:
 				routerError.Status = http.StatusInternalServerError
 		}
