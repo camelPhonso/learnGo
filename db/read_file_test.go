@@ -18,7 +18,7 @@ func TestRead(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			_, err := Read(tt.filePath)
 
-			if (err == nil) != tt.want {
+			if (err != nil) != tt.want {
 				t.Errorf("Unexpected error: %v", err)
 			}
 		})
