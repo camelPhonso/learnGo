@@ -21,7 +21,7 @@ type Movie struct {
 func InitPostgresDB() {
 	err = godotenv.Load(".env")
 	if err != nil {
-		fmt.Print("error loading database: %s", err);
+		fmt.Printf("error loading database: %s", err);
 		return
 	}
 
