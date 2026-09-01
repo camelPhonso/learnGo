@@ -1,7 +1,11 @@
 package router
 
 import (
+	"os"
+	"bufio"
+	"fmt"
 	"net/http"
+	"encoding/json"
 
 	"github.com/gin-gonic/gin"
 	db "local.learn.go/db"
@@ -60,4 +64,35 @@ func DeleteOne(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusOK, gin.H{"message": "Removed successfully"})
+}
+
+func UploadFile(context *gin.Context) {
+	file, err := context.FormFile("movie-list") // match the form key in the template
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	content, err := os.Open(file.Filename)
+	if err != nil {
+		fmt.Printf("error reading file: %s", err.Error())
+		return
+	}
+	defer content.Close()
+
+	scanner := bufio.NewScanner(content)
+	for scanner.Scan() {
+		var newMovie db.Movie
+
+		line := []byte(fmt.Sprintf("{%s}", scanner.Text()))
+		err := json.Unmarshal(line, &newMovie)
+		if err != nil {
+			context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		db.CreateMovie(&newMovie)
+	}
+
+	context.JSON(http.StatusOK, gin.H{"file": file.Filename})
 }
