@@ -16,9 +16,11 @@ func InitRouter() *gin.Engine {
 	router.GET("/movies/:movieId", FindOne)
 	router.POST("/movies", Insert)
 	router.DELETE("/movies/:movieId", DeleteOne)
+
+	router.POST("/upload", UploadFile)
 	
 	// html blob is served to public pages 
-	// authmiddleware is not applied to this group
+	// authMiddleware is not applied to this group
 	router.LoadHTMLGlob("templates/*")
 	public := router.Group("/public")
 	{
