@@ -1,0 +1,25 @@
+info:
+  name: Upload File
+  type: http
+  seq: 7
+
+http:
+  method: POST
+  url: "{{baseUrl}}/upload"
+  body:
+    type: multipart-form
+    data:
+      - name: movie-list
+        type: file
+        value:
+          - /Users/alphonsovarela/localRepo/learnGo/test_movie_list.txt
+        contentType: text/plain; charset=utf-8
+        description: Test file with five lines of movie metadata
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
