@@ -7,7 +7,7 @@ import (
 func CreateMovie(movie *Movie) (*Movie, error) {
 	movie.Id = uuid.New().String()
 
-	response := db.Create(&movie)
+	response := DB.Create(&movie)
 	if response.Error != nil {
 		return nil, Error{ErrNotActioned}
 	}
@@ -17,7 +17,7 @@ func CreateMovie(movie *Movie) (*Movie, error) {
 
 func GetAllMovies() ([]*Movie, error) {
 	var allMovies []*Movie
-	result := db.Find(&allMovies)
+	result := DB.Find(&allMovies)
 
 	if result.Error != nil {
 		return nil, Error{ErrNotFound}
@@ -31,7 +31,7 @@ func GetAllMovies() ([]*Movie, error) {
 
 func GetMovie(id string) (*Movie, error) {
 	var movie *Movie	
-	response := db.First(&movie, "id=?", id)
+	response := DB.First(&movie, "id=?", id)
 
 	if response.RowsAffected == 0 {
 		return nil, Error{ErrNotFound}
@@ -41,7 +41,7 @@ func GetMovie(id string) (*Movie, error) {
 
 func DeleteMovie(id string) error {
 	var deletedMovie Movie
-	result := db.Delete(&deletedMovie, "id = ?", id)
+	result := DB.Delete(&deletedMovie, "id = ?", id)
 
 	if result.RowsAffected == 0 {
 		return Error{ErrNotActioned}

@@ -9,12 +9,12 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var db *gorm.DB
+var DB *gorm.DB
 var err error
 
 type Movie struct {
 	Id string `json:"id" gorm:"primaryKey"`
-	Name string `json:"name"`
+	Name string `json:"name" gorm:"not null"`
 	Description string `json:"description"`
 }
 
@@ -42,12 +42,12 @@ func InitPostgresDB() {
 		password,
 	)
 
-	db, err = gorm.Open(postgres.Open(connectionString), &gorm.Config{})
+	DB, err = gorm.Open(postgres.Open(connectionString), &gorm.Config{})
 	if err != nil {
 		fmt.Print("Error opening connection to db: s%", err)
 		return
 	}
 
-	db.Exec("SELECT 'CREATE DATABASE ?' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname=?)", dbName, dbName)
-	db.AutoMigrate(Movie{})
+	DB.Exec("SELECT 'CREATE DATABASE ?' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname=?)", dbName, dbName)
+	DB.AutoMigrate(Movie{})
 }

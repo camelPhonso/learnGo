@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	db "local.learn.go/db"
 )
 
@@ -72,11 +73,20 @@ func UploadFile(context *gin.Context) {
 	movies, err := db.Read(file.Filename)
 	if err != nil {
 		result := FromError(err)
-		context.JSON(result.Status, result.Error())
+		context.JSON(result.Status, gin.H{"error": result.Error()})
+		return
 	}
+	
+	db.DB.Transaction( func(tx *gorm.DB) error {
+		for _, movie := range movies {
+			_, err := db.CreateMovie(&movie)
+			if err != nil {
+				return err
+			}
+		}
+		
+		return nil
+	})
 
-	for _, movie := range movies {
-		db.CreateMovie(&movie)
-	}
 	context.JSON(http.StatusOK, gin.H{"file": file.Filename})
 }
