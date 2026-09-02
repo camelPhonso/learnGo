@@ -10,8 +10,9 @@ func TestRead(t *testing.T) {
 		filePath string
 		want bool
 	}{
-		{"Valid scenario", "../test_movie_list.txt", false},
-		{"Invalid scenario", "../fake_file_path.txt", true},
+		{"Valid File", "../test_movie_list.txt", false},
+		{"Inexistent File", "../fake_file_path.txt", true},
+		{"Corrupted File", "../bat_test_movie_list.txt", true},
 	}
 
 	for _, tt := range tests {
