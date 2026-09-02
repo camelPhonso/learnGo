@@ -14,7 +14,14 @@ http:
         value:
           - /Users/alphonsovarela/localRepo/learnGo/test_movie_list.txt
         contentType: text/plain; charset=utf-8
-        description: Test file with five lines of movie metadata
+        description: Good File
+        disabled: true
+      - name: movie-list
+        type: file
+        value:
+          - /Users/alphonsovarela/localRepo/learnGo/bad_test_movie_list.txt
+        contentType: text/plain; charset=utf-8
+        description: Bad File
   auth: inherit
 
 settings:
